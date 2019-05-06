@@ -67,7 +67,7 @@ public class CopyingSaver<T> {
 				try {
 					savingLock.wait();
 				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
+					throw new RuntimeException("Interrupted while waiting for another save operation to finish", e);
 				}
 			}
 			saving = true;

@@ -48,7 +48,7 @@ public class YmlConfig extends YamlConfiguration {
 					setDefaults(loadConfiguration(reader));
 				}
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				throw new RuntimeException("Error while loading the defaults for config file: " + fileName, e);
 			}
 		}
 	}
@@ -70,7 +70,7 @@ public class YmlConfig extends YamlConfiguration {
 		try {
 			load(file);
 		} catch (IOException | InvalidConfigurationException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Error while loading config file: " + file.getPath(), e);
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class YmlConfig extends YamlConfiguration {
 		try {
 			save(file);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Error while saving config file: " + file.getPath(), e);
 		}
 	}
 	

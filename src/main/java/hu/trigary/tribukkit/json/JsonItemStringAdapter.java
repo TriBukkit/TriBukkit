@@ -40,8 +40,7 @@ public class JsonItemStringAdapter implements JsonSerializer<ItemStack>, JsonDes
 	
 	
 	@Override
-	public ItemStack deserialize(JsonElement json, Type type, JsonDeserializationContext context)
-			throws JsonParseException {
+	public ItemStack deserialize(JsonElement json, Type type, JsonDeserializationContext context) {
 		return deserialize(json.getAsString());
 	}
 	

@@ -22,13 +22,12 @@ public class JsonConfigurationSerializableAdapter implements
 	}
 	
 	@Override
-	public ConfigurationSerializable deserialize(JsonElement json, Type type,
-			JsonDeserializationContext context) throws JsonParseException {
+	public ConfigurationSerializable deserialize(JsonElement json, Type type, JsonDeserializationContext context) {
 		try {
 			//noinspection unchecked
 			return (ConfigurationSerializable) deserialize((Map<String, Object>) context.deserialize(json, MAP_TYPE));
 		} catch (RuntimeException e) {
-			throw new JsonParseException(e);
+			throw new JsonParseException("Error while deserializing ConfigurationSerializable", e);
 		}
 	}
 	

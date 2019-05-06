@@ -23,8 +23,7 @@ public class JsonBlockLocationAdapter implements JsonSerializer<BlockLocation>, 
 	
 	
 	@Override
-	public BlockLocation deserialize(JsonElement json, Type type, JsonDeserializationContext context)
-			throws JsonParseException {
+	public BlockLocation deserialize(JsonElement json, Type type, JsonDeserializationContext context) {
 		return deserialize(json.getAsString());
 	}
 	

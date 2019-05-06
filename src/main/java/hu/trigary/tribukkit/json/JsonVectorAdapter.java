@@ -22,8 +22,7 @@ public class JsonVectorAdapter implements JsonSerializer<Vector>, JsonDeserializ
 	
 	
 	@Override
-	public Vector deserialize(JsonElement json, Type type, JsonDeserializationContext context)
-			throws JsonParseException {
+	public Vector deserialize(JsonElement json, Type type, JsonDeserializationContext context) {
 		return deserialize(json.getAsString());
 	}
 	

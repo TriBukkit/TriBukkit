@@ -100,7 +100,7 @@ public abstract class TriJavaPlugin extends JavaPlugin {
 			Bukkit.getPluginManager().registerEvents(CustomInventoryListener.class
 					.getDeclaredConstructor().newInstance(), this);
 		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
+			throw new AssertionError("Can't reflective instantiate CustomInventoryListener", e);
 		}
 	}
 	

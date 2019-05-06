@@ -26,8 +26,7 @@ public class JsonLazyLocationAdapter implements JsonSerializer<LazyLocation>, Js
 	
 	
 	@Override
-	public LazyLocation deserialize(JsonElement json, Type type, JsonDeserializationContext context)
-			throws JsonParseException {
+	public LazyLocation deserialize(JsonElement json, Type type, JsonDeserializationContext context) {
 		return deserialize(json.getAsString());
 	}
 	

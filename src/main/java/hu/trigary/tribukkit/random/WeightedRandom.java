@@ -14,6 +14,7 @@ import java.util.function.Function;
  * This class is preferred over {@link WeightedRandomCollection}
  * when only a single entry is needed from the same source for performance reasons.
  * <br><br>
+ * If the source is an empty collection, then null will be returned by these methods.
  * The entries can be null and the same entry can be present multiple times in the source.
  * The weights must be non-null positive (non-zero and non-negative) values.
  */
@@ -29,7 +30,7 @@ public class WeightedRandom {
 	 * @param weightExtractor the function which gets a weight from a source element
 	 * @param <T> the type of the source elements
 	 * @param <E> the type of the entry
-	 * @return the randomly selected entry
+	 * @return the randomly selected entry or null, if the source is empty
 	 */
 	@Contract(pure = true)
 	public static <T, E> E get(@NotNull Collection<T> source,
@@ -39,7 +40,7 @@ public class WeightedRandom {
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		for (T value : source) {
 			Double weight = weightExtractor.apply(value);
-			Validate.isTrue(weight != null && weight > 0);
+			Validate.isTrue(weight != null && weight > 0, "Weights must be non-null positive values");
 			if (random.nextDouble(weightSum + weight) >= weightSum) {
 				result = entryExtractor.apply(value);
 			}
@@ -55,7 +56,7 @@ public class WeightedRandom {
 	 * @param source the entries themselves and the source of the weights
 	 * @param weightExtractor the function which gets a weight from a source element
 	 * @param <E> the type of the entry
-	 * @return the randomly selected entry
+	 * @return the randomly selected entry or null, if the source is empty
 	 */
 	@Contract(pure = true)
 	public static <E> E get(@NotNull Collection<E> source,
@@ -69,7 +70,7 @@ public class WeightedRandom {
 	 *
 	 * @param source the map containing the entry-weight pairs
 	 * @param <E> the type of the entry
-	 * @return the randomly selected entry
+	 * @return the randomly selected entry or null, if the source is empty
 	 */
 	@Contract(pure = true)
 	public static <E> E get(@NotNull Map<E, Double> source) {

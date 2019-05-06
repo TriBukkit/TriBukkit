@@ -13,6 +13,7 @@ import java.util.function.Function;
  * This class is preferred over {@link WeightedRandom}
  * when multiple random entries are needed from the same source for performance reasons.
  * <br><br>
+ * The source must not be an empty collection.
  * The entries can be null and the same entry can be present multiple times in the source.
  * The weights must be non-null positive (non-zero and non-negative) values.
  *
@@ -34,12 +35,12 @@ public class WeightedRandomCollection<E> {
 	 */
 	public <T> WeightedRandomCollection(@NotNull Collection<T> source,
 			@NotNull Function<T, E> entryExtractor, @NotNull Function<T, Double> weightExtractor) {
-		Validate.isTrue(!source.isEmpty());
+		Validate.isTrue(!source.isEmpty(), "Source must not be empty");
 		double sum = 0;
 		for (T value : source) {
 			entries.put(sum, entryExtractor.apply(value));
 			Double weight = weightExtractor.apply(value);
-			Validate.isTrue(weight != null && weight > 0);
+			Validate.isTrue(weight != null && weight > 0, "Weights must be non-null positive values");
 			sum += weight;
 		}
 		weightSum = sum;

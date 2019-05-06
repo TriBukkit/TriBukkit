@@ -2,7 +2,6 @@ package hu.trigary.tribukkit.json;
 
 import com.google.gson.*;
 import hu.trigary.tribukkit.data.LazyLocation;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +22,7 @@ public class JsonLocationAdapter implements JsonSerializer<Location>, JsonDeseri
 	
 	
 	@Override
-	public Location deserialize(JsonElement json, Type type, JsonDeserializationContext context)
-			throws JsonParseException {
+	public Location deserialize(JsonElement json, Type type, JsonDeserializationContext context) {
 		return deserialize(json.getAsString());
 	}
 	
@@ -32,7 +30,9 @@ public class JsonLocationAdapter implements JsonSerializer<Location>, JsonDeseri
 	public static Location deserialize(@NotNull String value) {
 		LazyLocation lazy = JsonLazyLocationAdapter.deserialize(value);
 		Location location = lazy.toLocation();
-		Validate.isTrue(location.getWorld() != null || lazy.getWorldName() == null);
+		if (location.getWorld() == null && lazy.getWorldName() != null) {
+			throw new JsonParseException("The world in the deserialized location is not yet loaded");
+		}
 		return location;
 	}
 }
