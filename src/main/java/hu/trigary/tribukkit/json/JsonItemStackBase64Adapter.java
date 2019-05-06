@@ -11,14 +11,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-/**
- * @noinspection resource, IOResourceOpenedButNotSafelyClosed
- */
 public class JsonItemStackBase64Adapter implements JsonSerializer<ItemStack>, JsonDeserializer<ItemStack> {
 	
 	@Override
 	public JsonElement serialize(ItemStack item, Type type, JsonSerializationContext context) {
 		try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+			//noinspection resource,IOResourceOpenedButNotSafelyClosed
 			new BukkitObjectOutputStream(stream).writeObject(item);
 			return new JsonPrimitive(Base64Coder.encodeLines(stream.toByteArray()));
 		} catch (IOException | RuntimeException e) {
@@ -31,6 +29,7 @@ public class JsonItemStackBase64Adapter implements JsonSerializer<ItemStack>, Js
 			throws JsonParseException {
 		try (ByteArrayInputStream stream = new ByteArrayInputStream(
 				Base64Coder.decodeLines(json.getAsString()))) {
+			//noinspection resource,IOResourceOpenedButNotSafelyClosed
 			return (ItemStack) new BukkitObjectInputStream(stream).readObject();
 		} catch (IOException | ClassNotFoundException | RuntimeException e) {
 			throw new JsonParseException(e);

@@ -5,11 +5,20 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A region which only compares world names.
+ * For more information, see {@link Region} JavaDocs.
+ */
 public class WorldRegion extends Region {
 	private final String world;
 	
+	/**
+	 * Creates a region which only compares world names.
+	 * For more information, see {@link Region} JavaDocs.
+	 *
+	 * @param world the world name to compare {@link Location}s with.
+	 */
 	public WorldRegion(@Nullable String world) {
-		//TODO doc: null -> matches everything
 		this.world = world;
 	}
 	

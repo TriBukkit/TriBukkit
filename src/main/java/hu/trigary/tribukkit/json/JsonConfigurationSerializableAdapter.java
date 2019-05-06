@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** @noinspection unchecked*/
 public class JsonConfigurationSerializableAdapter implements
 		JsonSerializer<ConfigurationSerializable>, JsonDeserializer<ConfigurationSerializable> {
 	private static final Type MAP_TYPE = new TypeToken<Map<String, Object>>() {}.getType();
@@ -26,6 +25,7 @@ public class JsonConfigurationSerializableAdapter implements
 	public ConfigurationSerializable deserialize(JsonElement json, Type type,
 			JsonDeserializationContext context) throws JsonParseException {
 		try {
+			//noinspection unchecked
 			return (ConfigurationSerializable) deserialize((Map<String, Object>) context.deserialize(json, MAP_TYPE));
 		} catch (RuntimeException e) {
 			throw new JsonParseException(e);
@@ -52,8 +52,10 @@ public class JsonConfigurationSerializableAdapter implements
 	
 	private Object deserialize(Object object) {
 		if (object instanceof Map) {
+			//noinspection unchecked
 			return deserialize((Map<String, Object>) object);
 		} else if (object instanceof List) {
+			//noinspection unchecked
 			deserialize((List<Object>) object);
 			return object;
 		} else if (object instanceof Number) {
