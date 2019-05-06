@@ -26,4 +26,13 @@ public class CopyingSaveableCollection<S extends CopyingSaveable<D>, D> implemen
 		}
 		return copy;
 	}
+	
+	@Override
+	public Collection<D> createSyncSaveCopy() {
+		Collection<D> copy = copyCollectionConstructor.get();
+		for (S element : source) {
+			copy.add(element.createSyncSaveCopy());
+		}
+		return copy;
+	}
 }

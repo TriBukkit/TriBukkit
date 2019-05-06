@@ -1,4 +1,4 @@
-package hu.trigary.tribukkit;
+package hu.trigary.tribukkit.message;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
@@ -18,10 +18,7 @@ public class Messages {
 	}
 	
 	public Messages(boolean translateColors, @NotNull ConfigurationSection section) {
-		this(translateColors ? section::getString : key -> {
-			String value = section.getString(key);
-			return value == null ? null : color(value);
-		});
+		this(translateColors ? section::getString : key -> color(section.getString(key)));
 	}
 	
 	
@@ -117,5 +114,11 @@ public class Messages {
 	
 	
 	
-	//TODO format to X decimal places? or always 2?
+	public static String formatDecimal(float number) {
+		return formatDecimal((double) number);
+	}
+	
+	public static String formatDecimal(double number) {
+		return String.format("%.2f", number);
+	}
 }

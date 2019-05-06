@@ -52,9 +52,9 @@ public enum HeadItemBuilder {
 		this.name = name;
 	}
 	
-	//TODO allow URLs in the enum constants
+	//TODO allow Base64 in the enum constants
 	
-	//TODO letters: https://github.com/WhoIsAlphaHelix/AlphaLibary/blob/master/src/main/java/io/github/alphahelixdev/alpary/utils/SkullUtil.java
+	//TODO letters, more mobs, etc: https://github.com/WhoIsAlphaHelix/AlphaLibary/blob/master/src/main/java/io/github/alphahelixdev/alpary/utils/SkullUtil.java
 	
 	
 	

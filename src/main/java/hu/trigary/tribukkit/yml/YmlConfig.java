@@ -1,6 +1,9 @@
 package hu.trigary.tribukkit.yml;
 
-import org.bukkit.ChatColor;
+import com.google.common.base.Charsets;
+import hu.trigary.tribukkit.TriJavaPlugin;
+import hu.trigary.tribukkit.message.Messages;
+import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,15 +12,27 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * A {@link YamlConfiguration} wrapper, which links the config to a file
+ * and also adds some other utility methods.
+ */
 public class YmlConfig extends YamlConfiguration {
-	private final Map<String, Object> cache = new HashMap<>();
 	private final File file;
 	
-	public YmlConfig(@NotNull JavaPlugin plugin, @NotNull String fileName, boolean saveDefault) {
+	/**
+	 * Creates a new config instance.
+	 *
+	 * @param plugin the plugin in which the config file is located
+	 * @param fileName the name of the config file
+	 * @param saveDefault whether to save the embedded default file
+	 * @param loadDefaults whether to load the embedded file's values as default values
+	 */
+	public YmlConfig(@NotNull JavaPlugin plugin, @NotNull String fileName,
+			boolean saveDefault, boolean loadDefaults) {
 		file = new File(plugin.getDataFolder(), fileName);
 		if (file.exists()) {
 			load();
@@ -25,6 +40,28 @@ public class YmlConfig extends YamlConfiguration {
 			plugin.saveResource(fileName, false);
 			load();
 		}
+		
+		if (loadDefaults) {
+			try (InputStream stream = plugin.getResource(fileName)) {
+				Validate.notNull(stream, "Can only load defaults if an embedded resource has been provided");
+				try (InputStreamReader reader = new InputStreamReader(stream, Charsets.UTF_8)) {
+					setDefaults(loadConfiguration(reader));
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+	
+	/**
+	 * Creates a new config instance.
+	 *
+	 * @param fileName the name of the config file
+	 * @param saveDefault whether to save the embedded default file
+	 * @param loadDefaults whether to load the embedded file's values as default values
+	 */
+	public YmlConfig(@NotNull String fileName, boolean saveDefault, boolean loadDefaults) {
+		this(TriJavaPlugin.getInstance(), fileName, saveDefault, loadDefaults);
 	}
 	
 	
@@ -48,10 +85,7 @@ public class YmlConfig extends YamlConfiguration {
 	
 	
 	public String getColoredString(@NotNull String key, @Nullable String def) {
-		return (String) cache.computeIfAbsent(key, k -> {
-			String raw = getString(k, def);
-			return raw == null ? null : ChatColor.translateAlternateColorCodes('&', raw);
-		});
+		return Messages.color(getString(key, def));
 	}
 	
 	public String getColoredString(@NotNull String key) {
@@ -61,11 +95,8 @@ public class YmlConfig extends YamlConfiguration {
 	
 	
 	public List<String> getColoredList(@NotNull String key) {
-		//noinspection unchecked
-		return (List<String>) cache.computeIfAbsent(key, k -> {
-			List<String> raw = getStringList(k);
-			raw.replaceAll(line -> ChatColor.translateAlternateColorCodes('&', line));
-			return raw;
-		});
+		List<String> list = getStringList(key);
+		list.replaceAll(Messages::color);
+		return list;
 	}
 }

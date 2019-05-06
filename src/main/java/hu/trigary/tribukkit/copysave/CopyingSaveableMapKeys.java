@@ -24,4 +24,11 @@ public class CopyingSaveableMapKeys<K extends CopyingSaveable<D>, V, D> implemen
 		source.forEach((key, value) -> copy.put(key.createAsyncSaveCopy(), value));
 		return copy;
 	}
+	
+	@Override
+	public Map<D, V> createSyncSaveCopy() {
+		Map<D, V> copy = copyCollectionConstructor.get();
+		source.forEach((key, value) -> copy.put(key.createSyncSaveCopy(), value));
+		return copy;
+	}
 }

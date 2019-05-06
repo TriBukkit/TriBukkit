@@ -1,5 +1,6 @@
 package hu.trigary.tribukkit.persistent;
 
+import com.google.common.base.Charsets;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class StringArrayDataType implements PersistentDataType<byte[], String[]>
 		int size = complex.length * 4;
 		byte[][] arrays = new byte[complex.length][];
 		for (int i = 0; i < complex.length; i++) {
-			byte[] array = complex[i].getBytes(StandardCharsets.UTF_8);
+			byte[] array = complex[i].getBytes(Charsets.UTF_8);
 			arrays[i] = array;
 			size += array.length;
 		}
@@ -59,7 +60,7 @@ public class StringArrayDataType implements PersistentDataType<byte[], String[]>
 			}
 			
 			buffer.get(temp, 0, length);
-			complex.add(new String(temp, 0, length, StandardCharsets.UTF_8));
+			complex.add(new String(temp, 0, length, Charsets.UTF_8));
 		}
 		return complex.toArray(String[]::new);
 	}
