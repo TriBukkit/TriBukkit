@@ -15,6 +15,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+/**
+ * A collection of utility methods which aim to make the use of {@link org.bukkit.persistence} easier.
+ * {@link ItemStack} and {@link PersistentDataHolder} instances are accepted as the target of these operations.
+ * In the case of {@link ItemStack} instances only the {@code set} operations can fail non-silently:
+ * an exception is thrown if the {@link ItemStack} is unable to provide {@link ItemMeta}
+ * (eg. if its type is {@link org.bukkit.Material#AIR}).
+ * All other operations silently fail for both {@link ItemStack} and {@link PersistentDataHolder} instances
+ * in case something went wrong, eg. when removing there is no {@link ItemMeta} or the specified key was never set.
+ */
 public abstract class PersistentUtils {
 	private static final Map<Class<?>, PersistentDataType<?, ?>> SUPPORTED_TYPE_MAP = new IdentityHashMap<>();
 	
@@ -36,10 +45,30 @@ public abstract class PersistentUtils {
 		addSupportedType(UUIDArrayDataType.INSTANCE);
 	}
 	
-	public static void addSupportedType(@NotNull PersistentDataType<?, ?> type) {
-		SUPPORTED_TYPE_MAP.put(type.getComplexType(), type);
+	/**
+	 * Registers the specified {@link PersistentDataType} as a supported type:
+	 * this class will serialize {@link PersistentDataType#getComplexType()}
+	 * instances using the specified instance.
+	 * The previously registered instance is returned by this method.
+	 *
+	 * @param type the type to register
+	 * @return the previously registered type or null, if there were none
+	 */
+	@Nullable
+	public static PersistentDataType<?, ?> addSupportedType(@NotNull PersistentDataType<?, ?> type) {
+		return SUPPORTED_TYPE_MAP.put(type.getComplexType(), type);
 	}
 	
+	/**
+	 * Attempts to get the {@link PersistentDataType} that was
+	 * registered to serialize the specified {@link Class}.
+	 * {@link #forceGetSupportedType(Class)} can be used instead of this method
+	 * to have an exception thrown instead of null returned.
+	 *
+	 * @param supportedClass the class to query
+	 * @param <Z> the type of the class
+	 * @return the registered {@link PersistentDataType} or null, if there were none
+	 */
 	@Nullable
 	@Contract(pure = true)
 	public static <Z> PersistentDataType<?, Z> getSupportedType(@NotNull Class<Z> supportedClass) {
@@ -47,6 +76,16 @@ public abstract class PersistentUtils {
 		return (PersistentDataType<?, Z>) SUPPORTED_TYPE_MAP.get(supportedClass);
 	}
 	
+	/**
+	 * Gets the {@link PersistentDataType} that was registered to serialize
+	 * the specified {@link Class}, or throws an exception if none were found.
+	 * {@link #getSupportedType(Class)} can be used instead of this method
+	 * to have null returned instead of an exception thrown.
+	 *
+	 * @param supportedClass the class to query
+	 * @param <Z> the type of the class
+	 * @return the registered {@link PersistentDataType}
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public static <Z> PersistentDataType<?, Z> forceGetSupportedType(@NotNull Class<Z> supportedClass) {

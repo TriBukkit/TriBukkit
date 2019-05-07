@@ -6,10 +6,15 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A {@link PersistentDataType} that stores a {@link String}[].
+ * UTF-8 encoding is used to serialize the {@link String} instances.
+ * The length of each serialized {@link String} is then stored in an {@link Integer},
+ * therefore the overhead is N*4 bytes.
+ */
 public class StringArrayDataType implements PersistentDataType<byte[], String[]> {
 	public static final StringArrayDataType INSTANCE = new StringArrayDataType();
 	

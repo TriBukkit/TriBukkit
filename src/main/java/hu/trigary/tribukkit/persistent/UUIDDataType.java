@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
+/**
+ * A {@link PersistentDataType} that stores an UUID as 16 bytes.
+ */
 public class UUIDDataType implements PersistentDataType<byte[], UUID> {
 	public static final UUIDDataType INSTANCE = new UUIDDataType();
 	

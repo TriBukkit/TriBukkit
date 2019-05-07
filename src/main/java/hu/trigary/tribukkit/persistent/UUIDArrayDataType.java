@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * A {@link PersistentDataType} that stores a {@link UUID}[] as N*16 bytes.
+ */
 public class UUIDArrayDataType implements PersistentDataType<byte[], UUID[]> {
 	public static final UUIDArrayDataType INSTANCE = new UUIDArrayDataType();
 	
