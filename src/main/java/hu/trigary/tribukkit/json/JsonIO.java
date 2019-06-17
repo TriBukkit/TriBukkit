@@ -1,5 +1,6 @@
 package hu.trigary.tribukkit.json;
 
+import com.google.common.base.Charsets;
 import com.google.gson.*;
 import hu.trigary.tribukkit.TriJavaPlugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,7 +17,7 @@ public abstract class JsonIO {
 			return fallbackValue;
 		}
 		
-		try (FileReader reader = new FileReader(file)) {
+		try (FileReader reader = new FileReader(file, Charsets.UTF_8)) {
 			return gson.fromJson(reader, type);
 		} catch (IOException | JsonParseException e) {
 			throw new RuntimeException("Error while reading JSON file: " + file, e);
@@ -39,7 +40,7 @@ public abstract class JsonIO {
 		//noinspection ResultOfMethodCallIgnored
 		file.getParentFile().mkdirs();
 		
-		try (FileWriter writer = new FileWriter(file)) {
+		try (FileWriter writer = new FileWriter(file, Charsets.UTF_8)) {
 			gson.toJson(value, type, writer);
 		} catch (IOException | JsonParseException e) {
 			throw new RuntimeException("Error while writing JSON file: " + file, e);
